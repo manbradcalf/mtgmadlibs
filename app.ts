@@ -1,19 +1,25 @@
-const cards = JSON.parse(Deno.readTextFileSync("./modernAtomic.json"));
+type Card = {
+  name: string;
+  type: string;
+};
 
-function r(list: { name: string; type: string }[]) {
+const cardsAndTypes: [Card] = JSON.parse(
+  Deno.readTextFileSync("./modernCardsAndTypes.json")
+);
+
+function r(list: Card[]) {
   return list[Math.floor(Math.random() * list.length)].name;
 }
-type card = [{ name: string; type: string }];
 
-const cardsAndTypes = Object.values(cards.data as card[]).map((c) => ({
-  name: c[0].name,
-  type: c[0].type,
-}));
+// const cardsAndTypes = Object.values(cards.data as card[]).map((c) => ({
+//   name: c[0].name,
+//   type: c[0].type,
+// }));
 
-Deno.writeTextFileSync(
-  "./modernCardsAndTypes.json",
-  JSON.stringify(cardsAndTypes)
-);
+// Deno.writeTextFileSync(
+//   "./modernCardsAndTypes.json",
+//   JSON.stringify(cardsAndTypes)
+// );
 
 const artifacts = cardsAndTypes.filter((card) =>
   card.type.includes("Artifact")
@@ -29,10 +35,14 @@ const enchantments = cardsAndTypes.filter((card) =>
 const instantsAndSorceries = cardsAndTypes.filter(
   (card) => card.type.includes("Instant") || card.type.includes("Sorcery")
 );
-console.log(`random artifact: ${r(artifacts)}\n
-creature:${r(creatures)}\n
-land:${r(lands)}\n
-enchantment:${r(enchantments)}\n
-instant or sorcery: ${r(instantsAndSorceries)}`);
+console.log(
+  `
+  random artifact: ${r(artifacts)}
+  creature:${r(creatures)}\n
+  land:${r(lands)}\n
+  enchantment:${r(enchantments)}\n
+  instant or sorcery: ${r(instantsAndSorceries)}
+  `
+);
 
 export { r, artifacts, creatures, lands, enchantments, instantsAndSorceries };
