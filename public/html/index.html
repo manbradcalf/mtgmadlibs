@@ -1,0 +1,22 @@
+<html>
+  <body>
+    <h1>Press the button for a madlib</h1>
+    <button id="generate-madlib-btn">Generate Madlib</button>
+    <br />
+    <h2>Madlib</h2>
+    <p id="mad-lib-text-area" style="width: 50vw; height: 25vw">
+      Your madlib will go here...
+    </p>
+  </body>
+
+  <script type="module">
+    import { generateMadlib } from "../js/madlibGenerator.js";
+    document
+      .querySelector("#generate-madlib-btn")
+      .addEventListener("click", function () {
+        const madlib = generateMadlib();
+        const madlibTextField = document.getElementById("mad-lib-text-area");
+        madlibTextField.textContent = madlib;
+      });
+  </script>
+</html>
