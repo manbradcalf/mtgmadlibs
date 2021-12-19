@@ -3,10 +3,7 @@ type Card = {
   type: string;
 };
 
-const cardsAndTypes: [Card] = JSON.parse(
-  Deno.readTextFileSync("./modernCardsAndTypes.json")
-);
-
+import {cards} from "../data/modernCardsAndTypes.js"
 function r(list: Card[]) {
   return list[Math.floor(Math.random() * list.length)].name;
 }
@@ -21,28 +18,30 @@ function r(list: Card[]) {
 //   JSON.stringify(cardsAndTypes)
 // );
 
-const artifacts = cardsAndTypes.filter((card) =>
+const artifacts = cards.filter((card) =>
   card.type.includes("Artifact")
 );
 
-const creatures = cardsAndTypes.filter((card) =>
+const creatures = cards.filter((card) =>
   card.type.includes("Creature")
 );
-const lands = cardsAndTypes.filter((card) => card.type.includes("Land"));
-const enchantments = cardsAndTypes.filter((card) =>
+
+const lands = cards.filter((card) => card.type.includes("Land"));
+
+const enchantments = cards.filter((card) =>
   card.type.includes("Enchantment")
 );
-const instantsAndSorceries = cardsAndTypes.filter(
+
+const instantsAndSorceries = cards.filter(
   (card) => card.type.includes("Instant") || card.type.includes("Sorcery")
 );
-console.log(
-  `
-  random artifact: ${r(artifacts)}
-  creature:${r(creatures)}\n
-  land:${r(lands)}\n
-  enchantment:${r(enchantments)}\n
-  instant or sorcery: ${r(instantsAndSorceries)}
-  `
-);
 
-export { r, artifacts, creatures, lands, enchantments, instantsAndSorceries };
+function generateMadlib(rawText: string): string {
+  rawText = rawText.replace(/\$creature/ig, r(creatures));
+  rawText = rawText.replace(/\$artifcate/ig, r(artifacts));
+  rawText = rawText.replace(/\$land/ig, r(lands));
+  rawText = rawText.replace(/\$enchantment/ig, r(enchantments));
+  rawText = rawText.replace(/\$instantOrSorcery/ig, r(instantsAndSorceries));
+  return rawText;
+}
+export { r, artifacts, creatures, lands, enchantments, instantsAndSorceries, generateMadlib };
